@@ -38,10 +38,6 @@ rts
  
 
 
-jmptoup
-jsr soup
-jsr up
-rts
  
 jmpdecreasehibyte
 jsr dechibyteagain
@@ -103,24 +99,31 @@ decreasehibytejmp
 jsr decreasehibyte
 rts
 
+jmptoup
+ 
+jsr up
+rts
  
 movejoy 
                 
-                 jsr collisionhi
-        
-                lda lastkey
+                    jsr collisionhi
+         
+               
+               lda lastkey
               
                 cmp #$7b   
-				beq soleft 
+				beq left 
 				cmp #$7e   
-				 ;beq soup
+				 beq jmptoup
 				cmp #$77    
-				beq soright
+				beq right
 				cmp #$7d   
-				beq sodown
+				beq down
 				cmp #$6f
-                beq soup
-              
+                beq jmptoup
+           
+
+        
 				rts
 				
  
@@ -133,24 +136,12 @@ cmp #28
 beq soleft
 rts
 soleft
-lda #1
-sta scrollvalue
- jsr expnoz
-   
-    lda positionl
-    sec
-    sbc #01
-    sta positionl
-    sta positionlbuffer
-  bcc counterrecount
-   lda #01
- sta scrolltrigger
-   
+ jsr noright22
      
     rts
 counterrecount
 jsr decreasehibyte
-lda #255
+lda #1
 sta positionl
  
 rts
@@ -160,24 +151,11 @@ cmp #28
 beq soright
 rts
 soright
-lda #254
-sta scrollvalue
-jsr expnoz
- 
- lda positionl
-    clc
-    adc #01
-    sta positionl
-  sta positionlbuffer
-  bcs recount
-    
-      lda #01
- sta scrolltrigger
-   
+ jsr noleft22
     rts
 recount
-jsr incresehighbyte
-lda #0
+;jsr incresehighbyte
+lda #1
 sta positionl
  
 rts
@@ -185,7 +163,7 @@ rts
 down
 lda joystktd
 cmp #28
-bne sodown
+beq sodown
  
 rts
 decreasehibyte   
@@ -197,23 +175,7 @@ beq incresehighbyte
 out
 rts
 sodown
-lda #216
- 
- 
-   jsr expnoz
-   lda positionl
- 
-    clc
-    adc #40
-    sta positionl
-    sta positionlbuffer
-    
-    bcs incresehighbyte
- 
-    lda #01
- sta scrolltrigger
- 
- 
+ jsr noup22
  
   
     rts
@@ -223,23 +185,7 @@ cmp #26
 bne soup
 rts
 soup 
-
-lda #40
-sta scrollvalue
- jsr expnoz
- 
-  lda positionl
-    sec
-    sbc #40
-    
-    sta positionl
- sta positionlbuffer
-   
- 
- bcc decreasehibyte
- 
-    lda #01
- sta scrolltrigger
+jsr nodown22
 rts
 
  
@@ -270,7 +216,7 @@ dec positionh
 dontdec
  rts
  
- jsr movewalls
+ 
 
  
 rts

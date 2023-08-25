@@ -279,60 +279,7 @@ sta $db00,x
  
  rts
  
-movewalls
-ldy increment
- ldx #40
  
- 
-backtowherewewere 
- iny
- lda wallpix,y
- 
- sta db,y
- 
- lda db,y
- iny
- sta db,x
-  
- lda wallpix2,y
- 
- sta db2,y
- 
- lda db2,y
-iny
- sta db2,x
- 
-  
- lda wallpix3,y
- 
- sta db3,y
- 
- lda db3,y
- iny
- sta db3,x
-  
- lda wallpix4,y
- 
- sta db4,y
- 
- lda db4,y
-iny
- sta db4,x
- 
- 
- 
- 
- iny
- 
-
- inx
- 
- cpx #255
-bne backtowherewewere
- 
-
-rts
-
 
 displaycolors
 ldx #0
@@ -455,9 +402,15 @@ displaywallslpjmp
 jsr displaycolorslp
 rts
 collisionhi
+ lda #28
+ sta joystktl
+  lda #28
+ sta joystktr
  
- 
-
+ lda #28
+ sta joystktd
+  lda #28
+ sta joystktu
 lda positionh
 cmp #1
  beq collidepage1br
@@ -895,49 +848,80 @@ rts
 
 
 nodown2
- 
+
+  jsr lazbeep1
+nodown22
+lda #5
+sta joystktd
 lda #0
 sta movementno
 
 lda #40
 sta movementno2
-lda #5
-sta joystktd
- 
+
 rts 
 
 noright2
-
-lda #0
- 
-sta movementno3
-
-lda #1
- 
-sta movementno4
-
+jsr lazbeep1
+noright22
 lda #48
 sta joystktr
  
+lda #0
+ 
+sta movementno3
+ 
+ 
+ 
+lda #1
+
+
+lda movementno4
+cmp #2
+beq holdmovement4
+inc movementno4
+
  
 rts
  
-noleft2
+holdmovement4
 
-lda #0
- 
-sta movementno4
+lda #23
+sta joystktl
+
+
 lda #1
+sta movementno4
+rts
  
+holdmovement3
+lda #48
+sta joystktr
+lda #1
 sta movementno3
+rts
+noleft2
+jsr lazbeep1
+noleft22
 lda #23
 sta joystktl
  
+lda #0
  
-rts
  
-noup2
+sta movementno4
 
+lda movementno3
+cmp #2
+beq holdmovement3
+inc movementno3
+
+rts
+
+noup2
+jsr lazbeep1
+
+noup22
 lda #40
 sta movementno
 
@@ -949,6 +933,7 @@ sta joystktu
 lda #0
 
 sta scrollvalue
+
 rts 
 
 correctwalls

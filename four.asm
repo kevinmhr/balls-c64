@@ -4,6 +4,7 @@ ldy #0
 boarderslp
 lda #186
 sta $3450,x
+
 lda #188
 sta $3770,x
 
@@ -22,20 +23,28 @@ adc #40
 tay
 lda #187
 sta $33d7,y
+sta $33d8,y
 lda #189
 sta $33fe,y
+sta $33fd,y
 lda #187
 sta $34c7,y
+sta $34c8,y
 lda #189
 sta $34ee,y
+sta $34ed,y
 lda #187
 sta $35b7,y
+sta $35b8,y
 lda #189
 sta $35de,y
+sta $35dd,y
 lda #187
 sta $36a7,y
+sta $36a8,y
 lda #189
 sta $36ce,y
+sta $36cd,y
 inx
 cpx #6
 bne boardersvertlp
@@ -48,8 +57,16 @@ ldy #0
 showboarderslp1
 
 
-
-
+lda #186
+sta $3450 
+sta $3451 
+sta $3477
+sta $3476
+lda #188
+sta $3797
+sta $3796
+sta $3770 
+sta $3771 
 lda $3400
 sta $0400
 
@@ -153,23 +170,6 @@ rts
 
  
 
- 
-
-moveleftward
-
-lda #1
-sta movementno3
-lda #0
-sta movementno4
-rts
-
-moverightward
-lda #0
-sta movementno3
-lda #4
-sta movementno4
-
-rts
 
 
 
