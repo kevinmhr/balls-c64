@@ -1,18 +1,78 @@
+boarders
+ldx #0
+ldy #0
+boarders2
+ 
+ldy increment
+cpy #40
+beq zeroboarderthing
+
+
+ 
+sty increment2
+
+ 
+
+ 
+
+
+
+inx
+cpx #255
+bne boarders2
+rts
+zeroboarderthing
+lda #0
+sta increment
+rts
+
 boardershor
 ldx #0
 ldy #0
-boarderslp
+ 
+boardershorlp
 lda #186
+
+
 sta $3450,x
 
 lda #188
 sta $3770,x
 
+ 
 
+ 
 inx
 cpx #40
-bne boarderslp
+bne boardershorlp
 rts
+collisionlights
+lda positionh
+cmp #1
+beq collisionlights1
+cmp #4
+beq collisionlights4
+rts
+
+collisionlights1
+lda positionl
+tay
+lda $3400,y
+cmp #199
+beq showgameoverjump
+rts
+collisionlights4
+lda positionl
+tay
+lda $3700,y
+cmp #199
+beq showgameoverjump
+rts
+showgameoverjump
+jsr showgameover
+rts
+
+
 boardersvert
 ldx #0
 ldy #0
@@ -49,6 +109,7 @@ inx
 cpx #6
 bne boardersvertlp
 rts
+ 
 showboarders
 
 ldx #0

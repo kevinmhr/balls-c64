@@ -73,6 +73,7 @@ movementno = $79
 movementno2 = $72
 movementno3 = $96
 movementno4 = $97
+deathlighttemp = $98
 *=$0801
         !byte    $1E, $08, $0A, $00, $9E, $20, $28,  $32, $30, $38, $30, $29, $3a, $8f, $20, $28, $43, $29, $20, $32, $30, $32, $31, $20, $4D, $54, $53, $56, $00, $00, $00
  
@@ -165,6 +166,7 @@ sta movementno3
 lda #87
 sta character
 lda #79
+
 sta character1
 lda #78
 sta character2
@@ -172,7 +174,8 @@ lda #80
 sta character3
 lda #0
 sta $d020
- 
+sta increment
+sta increment2
  lda #2
  sta opposebulletcolor
 lda #03
@@ -294,6 +297,7 @@ ldx #0
 
  
 
+
 ;  jsr showingbits
 
 
@@ -306,35 +310,104 @@ jsr ballmovement
  
  jsr ballmovement4
  
-   jsr dojoy
- jsr movejoy
- jsr displayoppbullet2
+
+
 wastetime
  
- inc increment
 
- 
+
+
 inc opposebulletcolor
+ jsr displaycolors
+   jsr dojoy
+ jsr movejoy
 
 
+ inc increment
+ jsr boarders
+ jsr hole
+ ; jsr timer
+    jsr collisionlights
+
  
- 
- jsr boardershor
+
+ jsr displayoppbullet2
+
+ldx #0
+
+   
+   jsr boardershor
+
 
 jsr boardersvert
- jsr showboarders
-  
-  jsr printscore
- 
- jsr displaycolors
 
-jsr display
+
+
+jsr showboarders
+ jsr display
+ jsr printscore
+ 
+
+
+ 
 
 jmp mainloop
 
 rts
+hole
+ldx increment2
+ 
+ 
+
+ 
+ 
+lda #199
+sta $3450,x
+sta $3770,x
+ 
+sta $3451,x
+sta $3771,x
+sta $3452,x
+sta $3772,x
+sta $344f,x
+sta $376f,x
+lda #0
+
+sta $d850,x
+
+sta $db70,x
 
 
+sta $d851,x
+sta $db71,x
+sta $d852,x
+sta $db72,x
+sta $d84f,x
+sta $db6f,x
+rts
+
+timer
+ldy #0
+ldx #0
+timerloop1
+
+ 
+
+jsr timerloop2
+inx
+cpx #5
+bne timerloop1
+rts
+timerloop2
+ldy #0
+timerloop2loop
+iny
+ 
+ 
+cpy #255
+bne timerloop2loop
+
+rts
 bulletchars 
  
 ldx oppbulletchar
@@ -654,18 +727,36 @@ sta $db00,x
 
 
 flightscollision
+clc
+
 lda opposebulletposl2
 
 cmp positionl
 beq checkhiflight
+
+lda opposebulletposl2
 adc #1
 
 cmp positionl
 beq checkhiflight
+lda opposebulletposl2
+
 sbc #1
+cmp positionl
+beq checkhiflight
+
+lda opposebulletposl2
+adc #40
 
 cmp positionl
 beq checkhiflight
+lda opposebulletposl2
+sbc #40
+cmp positionl
+beq checkhiflight
+
+
+
 rts
 checkhiflight
 lda opposebulletposh2
@@ -687,10 +778,10 @@ showgameover
 
 jsr expnoz2
 showgameover2 
-jsr smiley
-jsr smiley2
-jsr drawcircle
-jsr lips
+;jsr smiley
+;jsr smiley2
+;jsr drawcircle
+;jsr lips
 ldy #0
 showgameoverloop
 
@@ -699,11 +790,11 @@ lda gameovertex,y
  
 
 
-sta $0459,y
+sta $056d,y
 lda #3
-sta $d859,y
+sta $d96d,y
 iny
-cpy #$17
+cpy #$20
 bne showgameoverloop
  
 lda $dc00
@@ -893,7 +984,7 @@ startuptext !scr "balls"
 startuptext2   !scr "keyvan mehrbakhsh 2023"
 gameovertex
 
-          !scr " you are hit press fire " 
+          !scr " you got off the board goodbye ! " 
 ;objecbuffer
    ;      !byte     0,0,0,0,0,0,0,0,0,0 
 

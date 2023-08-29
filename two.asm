@@ -120,7 +120,7 @@ sta $0400,y
  
 lda charactercolour
 sta $d800,y
- 
+
 rts
 displaypagetwo
 
