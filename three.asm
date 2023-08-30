@@ -74,7 +74,7 @@ rts
 ballmovement3
  clc
 moveright
-
+clc
 lda positionl
 adc movementno3
    sta positionl
@@ -84,6 +84,7 @@ rts
 ballmovement4
 sec 
 moveleft
+sec
 lda positionl
 sbc movementno4
   sta positionl

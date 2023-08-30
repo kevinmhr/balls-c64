@@ -859,8 +859,19 @@ sta movementno
 lda #40
 sta movementno2
 
+lda movementno3
+cmp #0
+beq zeromovement
+dec movementno3
+lda movementno4
+cmp #0
+beq zeromovement
+dec movementno4
+zeromovement
 rts 
+ 
 
+ 
 noright2
 jsr lazbeep1
 noright22
@@ -933,7 +944,14 @@ sta joystktu
 lda #0
 
 sta scrollvalue
-
+lda movementno3
+cmp #0
+beq zeromovement
+dec movementno3
+lda movementno4
+cmp #0
+beq zeromovement
+dec movementno4
 rts 
 
 correctwalls

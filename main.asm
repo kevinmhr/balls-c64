@@ -141,7 +141,7 @@ sta $2267
  
 
 init 
-lda #40
+lda #44
 sta positionl
 ldx #0
 ldy #0
@@ -155,7 +155,7 @@ lda #40
 sta reversetrigger
  
 sta shuf
-lda #$1
+lda #$03
 sta positionh
 lda #39
 sta movementno
@@ -197,11 +197,11 @@ lda positionl
  
   lda positionh
  sta bulletpositionh
-     lda #$44
+     lda #01
  sta opposebulletposl
   lda #$01
  sta opposebulletposh
-     lda #$44
+     lda #$01
  sta opposebulletposl2
   lda #$01
  sta opposebulletposh2
@@ -311,11 +311,13 @@ jsr ballmovement
  jsr ballmovement4
  
 
+jsr displaycolorcolumn
+ 
 
 wastetime
  
 
-
+ jsr display
 
 inc opposebulletcolor
  jsr displaycolors
@@ -325,43 +327,20 @@ inc opposebulletcolor
 
  inc increment
  jsr boarders
- jsr hole
+
  ; jsr timer
     jsr collisionlights
 
  
 
- jsr displayoppbullet2
 
 ldx #0
 
    
    jsr boardershor
-
-
-jsr boardersvert
-
-
-
-jsr showboarders
- jsr display
- jsr printscore
- 
-
-
- 
-
-jmp mainloop
-
-rts
-hole
 ldx increment2
  
- 
-
- 
- 
-lda #199
+lda #198
 sta $3450,x
 sta $3770,x
  
@@ -371,19 +350,34 @@ sta $3452,x
 sta $3772,x
 sta $344f,x
 sta $376f,x
-lda #0
 
-sta $d850,x
-
-sta $db70,x
+jsr boardersvert
+ 
 
 
-sta $d851,x
-sta $db71,x
-sta $d852,x
-sta $db72,x
-sta $d84f,x
-sta $db6f,x
+jsr showboarders
+
+ 
+
+
+ jsr displayoppbullet2
+
+
+ jsr printscore
+ 
+ 
+
+jmp mainloop
+
+rts
+hole
+
+ 
+
+ 
+ 
+
+ 
 rts
 
 timer
@@ -462,10 +456,6 @@ cls
 
  
  rts
- 
-
- 
- 
  
 
 checkscoreones
@@ -607,7 +597,7 @@ sta $db00,x
 incroppbulletpositionh
  
  
-
+clc
 
 lda opposebulletposh
 cmp #5
@@ -618,9 +608,9 @@ rts
 resetopposebulletposh 
  
  
-lda opposebulletposl2
+ lda #1
 sta opposebulletposl
-lda wallspositionh
+lda #1
 sta opposebulletposh
 rts
  
@@ -629,17 +619,16 @@ rts
  
 
  
-displayoppbullet
+displaycolorcolumn
  
+ldx #0
+displaycolorcolumn2
 
-displayoppbulletloop
+ 
+ 
+ ldx opposebulletposl
 clc
-inx
-iny
  
- 
-
-ldx opposebulletposl
  txa
 adc #40
  
@@ -657,69 +646,67 @@ oppbulllab
     ldx opposebulletposl
 lda opposebulletposh
 cmp #$01
-beq displayoppbulletpg1
+beq displaycolorcolumnpg1
 cmp #$02
-beq displayoppbulletpg2
+beq displaycolorcolumnpg2
 cmp #$03
-beq displayoppbulletpg3 
+beq displaycolorcolumnpg3
 cmp #$04
-beq displayoppbulletpg4
+beq displaycolorcolumnpg4
 
  
  
 rts
 
-displayoppbulletloopbridge
-jsr displayoppbulletloop
-rts
+ 
 
-displayoppbulletpg1
+displaycolorcolumnpg1
 
 lda #86
-sta $0400,x
- 
+sta $3400,x
+ sta $3425,x
 lda opposebulletcolor
 sta $d800,x
- 
+ sta $d825,x
  
  
 
 rts
-displayoppbulletpg2
+displaycolorcolumnpg2
  
 lda #86
-sta $0500,x
- 
+sta $3500,x
+ sta $3525,x
 lda opposebulletcolor
 sta $d900,x
- 
+ sta $d925,x
  
 rts
-displayoppbulletpg3
+displaycolorcolumnpg3
  
  
  
 lda #86
 
-sta $0600,x
- 
+sta $3600,x
+sta $3625,x
 lda opposebulletcolor
 sta $da00,x
- 
+ sta $da25,x
   
  rts
 
 
-displayoppbulletpg4
+displaycolorcolumnpg4
  
 
 lda #86
-sta $0700,x
- 
+sta $3700,x
+ sta $3725,x
  
 lda opposebulletcolor
 sta $db00,x
- 
+ sta $db25,x
  
  rts
 
@@ -813,39 +800,7 @@ jsr init
 rts
 
 
-collision
  
-
-lda opposebulletposl
-sbc #1  
-cmp positionl
-beq forward
-lda opposebulletposl
- 
-cmp positionl
-beq forward
-
-lda opposebulletposl2
-sbc #1
-cmp positionl
-beq forward2
- 
-lda opposebulletposl2
- 
-cmp positionl
-beq forward2
-rts 
-forward 
-lda opposebulletposh
-cmp positionh
-beq showgameover
-rts
-forward2
-
-lda opposebulletposh2
-cmp positionh
-beq showgameover
-rts 
  
  
  

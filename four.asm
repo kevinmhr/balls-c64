@@ -4,7 +4,7 @@ ldy #0
 boarders2
  
 ldy increment
-cpy #40
+cpy #39
 beq zeroboarderthing
 
 
@@ -58,14 +58,14 @@ collisionlights1
 lda positionl
 tay
 lda $3400,y
-cmp #199
+cmp #198
 beq showgameoverjump
 rts
 collisionlights4
 lda positionl
 tay
 lda $3700,y
-cmp #199
+cmp #198
 beq showgameoverjump
 rts
 showgameoverjump
@@ -105,10 +105,17 @@ sta $36a8,y
 lda #189
 sta $36ce,y
 sta $36cd,y
+
+
+
+
 inx
 cpx #6
 bne boardersvertlp
+ 
 rts
+
+ 
  
 showboarders
 
@@ -128,17 +135,7 @@ sta $3797
 sta $3796
 sta $3770 
 sta $3771 
-lda $3400
-sta $0400
 
-lda $3500
-sta $0500
-
-lda $3600
-sta $0600
-
-lda $3700
-sta $0700
 
 lda $33ff,y
 sta $03ff,y
