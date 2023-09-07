@@ -75,9 +75,9 @@ movementno3 = $96
 movementno4 = $97
 deathlighttemp = $98
 *=$0801
-        !byte    $1E, $08, $0A, $00, $9E, $20, $28,  $32, $30, $38, $30, $29, $3a, $8f, $20, $28, $43, $29, $20, $32, $30, $32, $31, $20, $4D, $54, $53, $56, $00, $00, $00
+        !byte    $1E, $08, $0A, $00, $9E, $20, $28,$32, $30, $38, $30, $29, $3a, $8f, $20, $28, $43, $29, $20, $32, $30, $32, $31, $20, $4D, $54, $53, $56, $00, $00, $00
  
-*=$0820
+*=$820
               
 
 lda $01    
@@ -138,7 +138,7 @@ sta $2266
 lda #255
 sta $2267        
 
- 
+jsr PLAYSOUND
 
 init 
 lda #44
@@ -338,18 +338,7 @@ ldx #0
 
    
    jsr boardershor
-ldx increment2
- 
-lda #198
-sta $3450,x
-sta $3770,x
- 
-sta $3451,x
-sta $3771,x
-sta $3452,x
-sta $3772,x
-sta $344f,x
-sta $376f,x
+jsr outlet
 
 jsr boardersvert
  
@@ -370,13 +359,44 @@ jsr showboarders
 jmp mainloop
 
 rts
-hole
+outlet
 
+ ldx increment2
  
+lda #198
+sta $3450,x
 
+sta $3770,x
+ 
+sta $3451,x
+sta $3771,x
+sta $3452,x
+sta $3772,x
+sta $344f,x
+sta $376f,x
+sta $344e,x
+sta $376e,x
+ sta $344d,x
+sta $376d,x
  
  
+lda #3
+sta $d850,x
 
+sta $db70,x
+ 
+sta $d851,x
+sta $db71,x
+sta $d852,x
+sta $db72,x
+sta $d84f,x
+sta $db6f,x
+ sta $d84e,x
+sta $db6e,x
+ 
+  sta $d84d,x
+sta $db6d,x
+ 
  
 rts
 
@@ -762,7 +782,7 @@ rts
  
 
 showgameover 
-
+jsr PLAYSOUND
 jsr expnoz2
 showgameover2 
 ;jsr smiley
@@ -834,6 +854,8 @@ rts
  
 addscore		
      
+        
+             
              jsr changeblockcharacter
               
              ;  jsr movewalls
@@ -931,7 +953,52 @@ printscore
 				lda #4
 				sta $dbe0	
 				rts
+PLAYSOUND
+               
+       lda #$00
+	 
+	jsr $7000
+
  
+	; disable interrupts
+ 	sei
+	lda #$7f
+	sta $dc0d
+	sta $dd0d
+	lda #$01
+	sta $d01a
+ 
+	; init irq
+ 	lda #<irq
+	ldx #>irq
+	sta $0314
+	stx $0315
+
+	; create rater interrupt at line 0
+	
+
+	; clear interrupts and ACK irq
+	lda $dc0d
+	lda $dd0d
+	
+	cli
+	rts
+irq    
+lda #0
+           
+   rol $d019
+   
+   
+  lda #0
+  jsr $7003
+        lda $dc00
+         cmp #$6f                ;READ FIRE
+                BEQ initagain  
+                JMP $EA81
+
+initagain
+jsr init
+rts
 somenum
          !byte     0,0,0,0,0,0,0,0,0,0 
 abitmove   !byte 0,1,2,3,2,1,0
@@ -1121,4 +1188,5 @@ sidebulletchardata
   !source "two.asm"    
     !source "three.asm"  
  !source "sounds.asm"
-
+*=$7000-$02
+ !bin "poketoi.prg" 
