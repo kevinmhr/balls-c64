@@ -884,8 +884,6 @@ sta movementno3
  
  
  
-lda #1
-
 
 lda movementno4
 cmp #2

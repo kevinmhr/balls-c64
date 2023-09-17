@@ -128,13 +128,22 @@ showboarderslp1
 lda #186
 sta $3450 
 sta $3451 
+
 sta $3477
+sta $347a
+sta $347b
+sta $349d
+sta $349c
 sta $3476
 lda #188
-sta $3797
-sta $3796
+sta $374a 
+sta $374b 
+sta $376d  
+sta $376c 
 sta $3770 
 sta $3771 
+sta $3797
+sta $3796
 
 
 lda $33ff,y
