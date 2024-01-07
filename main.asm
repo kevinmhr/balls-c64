@@ -295,11 +295,13 @@ ldx #0
   ldy #0
  
 
- 
+ jsr display
+  jsr displayoppbullet2
 
 
+wastetime
 ;  jsr showingbits
-
+ 
 
 jsr ballmovement
 
@@ -311,15 +313,16 @@ jsr ballmovement
  jsr ballmovement4
  
 
-jsr displaycolorcolumn
+ 
+   jsr displayoppbullet2
+
+
+ 
  
 
-wastetime
- 
-
- jsr display
-
-inc opposebulletcolor
+afterresetcolor
+lda #1
+sta opposebulletcolor
  jsr displaycolors
    jsr dojoy
  jsr movejoy
@@ -331,7 +334,6 @@ inc opposebulletcolor
  ; jsr timer
     jsr collisionlights
 
- 
 
 
 ldx #0
@@ -342,23 +344,25 @@ jsr outlet
 
 jsr boardersvert
  
-
-
+jsr displaycolorcolumn
 jsr showboarders
 
  
 
 
- jsr displayoppbullet2
+
 
 
  jsr printscore
  
+
  
 
 jmp mainloop
 
 rts
+
+
 outlet
 
  ldx increment2
@@ -683,8 +687,8 @@ rts
 displaycolorcolumnpg1
 
 lda #86
-sta $3400,x
- sta $3425,x
+; sta $3400,x
+; sta $3425,x
 lda opposebulletcolor
 sta $d800,x
  sta $d825,x
@@ -695,8 +699,8 @@ rts
 displaycolorcolumnpg2
  
 lda #86
-sta $3500,x
- sta $3525,x
+;sta $3500,x
+; sta $3525,x
 lda opposebulletcolor
 sta $d900,x
  sta $d925,x
@@ -708,8 +712,8 @@ displaycolorcolumnpg3
  
 lda #86
 
-sta $3600,x
-sta $3625,x
+;sta $3600,x
+;sta $3625,x
 lda opposebulletcolor
 sta $da00,x
  sta $da25,x
@@ -721,8 +725,8 @@ displaycolorcolumnpg4
  
 
 lda #86
-sta $3700,x
- sta $3725,x
+;sta $3700,x
+; sta $3725,x
  
 lda opposebulletcolor
 sta $db00,x
@@ -851,7 +855,12 @@ rts
 backtostart
  
 rts
- 
+resetwallscol
+lda #2
+sta wallscolour
+sta bgcolor
+jsr afterresetcolor
+rts
 addscore		
      
         
@@ -862,8 +871,15 @@ addscore
                
            inc oppbulletchar
            inc opposebulletcolor
-        inc wallscolour
-            inc bgcolor
+       
+        lda wallscolour
+       cmp #9
+         beq resetwallscol
+       inc wallscolour
+          
+     
+          
+          inc bgcolor
               jsr bulletchars
                
                  clc
